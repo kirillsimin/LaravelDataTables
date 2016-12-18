@@ -10,19 +10,30 @@ use App\Band;
 
 class BandController extends Controller
 {
+    /**
+    * Displays bands index page
+    * @return View
+    */
     public function index()
     {
         return view('bands.index');
     }
 
+    /**
+    * Processes datatables Ajax requests
+    * @param $request, Request instance
+    * @return $datatables, Datatables Object
+    */
     public function data(Request $request)
     {
-        if ($request->search) {
-            $bands = Band::where('name', 'LIKE', '%'.$request->search['value'].'%');
-        } else {
-            $bands = Band::all();
+        $bands = Band::all();
+
+        // Filter from search box
+        if (!empty($request->search['value'])) {
+            $bands = $bands::where('name', 'LIKE', '%'.$request->search['value'].'%');
         }
 
+        // Process datatables object
         $datatables = Datatables::of($bands)
         ->editColumn('still_active', function($bands) {
             if ($bands->still_active === 1) {
@@ -44,6 +55,11 @@ class BandController extends Controller
         return $datatables;
     }
 
+    /**
+    * Processes Ajax search requests from Select2 Dropdown
+    * @param $request, Request instance
+    * @return Array
+    */
     public function search(Request $request)
     {
         return Band::select('id', 'name AS text')

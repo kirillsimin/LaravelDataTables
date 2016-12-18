@@ -12,33 +12,41 @@ use App\Album;
 
 class AlbumController extends Controller
 {
+    /**
+    * Displays the albums index page
+    * @return View
+    */
     public function index()
     {
         return view('albums.index', []);
     }
 
+    /**
+    * Processes datatables Ajax requests
+    * @param $request, Request instance
+    * @return $datatables, Datatables Object
+    */
     public function data(Request $request)
     {
         $albums = Album::with('band');
 
+        // Filter from search box
         if (!empty($request->search['value'])) {
-            $albums = $albums
-                ->whereHas('band', function($query) use ($request){
-                    $query
-                    ->where('name', 'LIKE', '%'.$request->search['value'].'%')
-                    ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
-                })
+            $albums = $albums->whereHas('band', function ($query) use ($request) {
+                    $query->where('name', 'LIKE', '%'.$request->search['value'].'%')
+                        ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
+                    })
                 ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%');
         }
 
+        // Filter from the bands dropdown
         if ($request->has('band_id')) {
-            $albums = $albums
-                ->whereHas('band', function($query) use ($request){
-                    $query
-                    ->where('id', $request->band_id);
-                });
+            $albums = $albums->whereHas('band', function ($query) use ($request){
+                $query->where('id', $request->band_id);
+            });
         }
 
+        // Process datatables object
         $datatables = Datatables::of($albums)
         ->editColumn('band', function($albums) {
             return $albums->band->name;
@@ -55,6 +63,7 @@ class AlbumController extends Controller
                 return $edit . $delete;
             })
         ->make(true);
+
         return $datatables;
     }
 }
