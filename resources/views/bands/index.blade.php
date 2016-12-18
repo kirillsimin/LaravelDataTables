@@ -13,6 +13,7 @@
                         <th class="td-shrink">Start Date</th>
                         <th class="td-shrink">Website</th>
                         <th class="td-shrink">Still Active</th>
+                        <th class="td-shrink">Action</th>
                     </tr>
                 </thead>
             </table>

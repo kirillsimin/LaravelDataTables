@@ -17,8 +17,13 @@ Route::group(['prefix' => '/'], function () {
 
 Route::group(['prefix' => '/bands'], function() {
     Route::get('/data', ['uses' => 'BandController@data']);
+    Route::get('/edit/{id}', ['uses' => 'BandController@edit', 'as' => 'band.edit']);
+    Route::post('/delete/{id}', ['uses' => 'BandController@delete', 'as' => 'band.delete']);
 });
 
 Route::group(['prefix' => 'albums'], function () {
     Route::get('/', ['uses' => 'AlbumController@index', 'as' => 'albums.index']);
+    Route::get('/data', ['uses' => 'AlbumController@data']);
+    Route::get('/edit/{id}', ['uses' => 'AlbumController@edit', 'as' => 'album.edit']);
+    Route::post('/delete/{id}', ['uses' => 'AlbumController@delete', 'as' => 'album.delete']);
 });
