@@ -7,3 +7,8 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.delete-band, .delete-album {
+    color: red;
+    cursor: pointer;
+}

@@ -45,7 +45,6 @@ $(document).ready(function () {
 
     $('#band-search').off('select2:select', function(){});
     $('#band-search').on('select2:select', function(e){
-        console.log('band-search', $(this).val());
         e.preventDefault();
         albumsTable.draw();
     });
@@ -75,6 +74,87 @@ $(document).ready(function () {
                 };
             }
         }
+    });
+
+    /**
+    * Delete Band
+    *****************************************************************/
+    $(document).off('click', '.delete-band');
+    $(document).on('click', '.delete-band', function() {
+        var bandId = $(this).data('band-id');
+        $('.warning-modal-yes').off('click');
+        $('.warning-modal-yes').on('click', function() {
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url: '/bands/delete',
+                method: 'post',
+                data: {
+                    _token: token,
+                    band_id: bandId
+                },
+                dataType: 'json'
+            })
+            .always(function(){
+                $('#warning-modal').find('.message').html('');
+            })
+            .done(function(data){
+                console.log(data);
+                if (data.success == true) {
+                    $('#warning-modal').modal('hide');
+                    bandsTable.draw();
+                }
+                if (data.success == false) {
+                    console.log(data.message);
+                    $('#warning-modal').find('.message').html(data.message);
+                }
+            })
+            .fail(function(data){
+                $('#warning-modal').find('.message').html('Unexpected error occured.');
+                response = JSON.parse(data.responseText);
+                console.log(data, response);
+
+            });
+        });
+    });
+
+    /**
+    * Delete Album
+    *****************************************************************/
+    $(document).off('click', '.delete-album');
+    $(document).on('click', '.delete-album', function() {
+        var albumId = $(this).data('album-id');
+        $('.warning-modal-yes').off('click');
+        $('.warning-modal-yes').on('click', function() {
+            var token = $('input[name="_token"]').val();
+            $.ajax({
+                url: '/albums/delete',
+                method: 'post',
+                data: {
+                    _token: token,
+                    album_id: albumId
+                },
+                dataType: 'json'
+            })
+            .always(function(){
+                $('#warning-modal').find('.message').html('');
+            })
+            .done(function(data){
+                console.log(data);
+                if (data.success == true) {
+                    $('#warning-modal').modal('hide');
+                    albumsTable.draw();
+                }
+                if (data.success == false) {
+                    console.log(data.message);
+                    $('#warning-modal').find('.message').html(data.message);
+                }
+            })
+            .fail(function(data){
+                $('#warning-modal').find('.message').html('Unexpected error');
+                response = JSON.parse(data.responseText);
+                console.log(data, response);
+            });
+        });
     });
 
 });

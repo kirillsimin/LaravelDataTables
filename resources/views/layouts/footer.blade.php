@@ -6,6 +6,8 @@
     {!! csrf_field() !!}
 {{-- @endif --}}
 
+@include('modals/warning')
+
 </body>
 </html>
 <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>

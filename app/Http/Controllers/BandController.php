@@ -47,7 +47,7 @@ class BandController extends Controller
         })
         ->addColumn('action', function ($bands) {
                 $edit = '<a class="fa fa-edit" href="' . route('band.edit', $bands->id) . '"></a>&nbsp;&nbsp;';
-                $delete = '<a class="fa fa-trash-o" href="#"></a>&nbsp;&nbsp;';
+                $delete = '<i class="delete-band fa fa-trash-o" data-band-id="'.$bands->id.'" data-toggle="modal" data-target="#warning-modal">&nbsp;&nbsp;';
                 return $edit . $delete;
             })
         ->make(true);
@@ -67,5 +67,19 @@ class BandController extends Controller
             ->orWhere('name', 'CONTAINS', '%'.$request->term.'%')
             ->get()
             ->toArray();
+    }
+
+    /**
+    * Processes Ajax request to delete a band
+    * @param $request, Request instance
+    * @return JSON
+    */
+    public function delete(Request $request)
+    {
+        $band = Band::findOrFail($request->band_id);
+        if ($band->delete()) {
+            return json_encode(['success' => true, 'message' => 'Band deleted.']);
+        }
+        return json_encode(['success' => false, 'message' => 'Something went wrong.']);
     }
 }

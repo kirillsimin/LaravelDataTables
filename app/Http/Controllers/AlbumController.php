@@ -59,11 +59,25 @@ class AlbumController extends Controller
         })
         ->addColumn('action', function ($albums) {
                 $edit = '<a class="fa fa-edit" href="' . route('album.edit', $albums->id) . '"></a>&nbsp;&nbsp;';
-                $delete = '<a class="fa fa-trash-o" href="#"></a>&nbsp;&nbsp;';
+                $delete = '<i class="delete-album fa fa-trash-o" data-album-id="'.$albums->id.'" data-toggle="modal" data-target="#warning-modal">&nbsp;&nbsp;';
                 return $edit . $delete;
             })
         ->make(true);
 
         return $datatables;
+    }
+
+    /**
+    * Processes Ajax request to delete an album
+    * @param $request, Request instance
+    * @return JSON
+    */
+    public function delete(Request $request)
+    {
+        $band = Album::findOrFail($request->album_id);
+        if ($band->delete()) {
+            return json_encode(['success' => true, 'message' => 'Album deleted.']);
+        }
+        return json_encode(['success' => false, 'message' => 'Something went wrong.']);
     }
 }
