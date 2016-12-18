@@ -11,6 +11,10 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::group(['prefix' => '/'], function () {
+    Route::get('/', ['uses' => 'BandController@index', 'as' => 'bands.index']);
+});
+
+Route::group(['prefix' => 'albums'], function () {
+    Route::get('/', ['uses' => 'AlbumController@index', 'as' => 'albums.index']);
 });
