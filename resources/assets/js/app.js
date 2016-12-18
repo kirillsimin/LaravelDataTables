@@ -1,20 +1,25 @@
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * include Vue and Vue Resource. This gives a great starting point for
- * building robust, powerful web applications using Vue and Laravel.
- */
-
-require('./bootstrap');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example', require('./components/Example.vue'));
-
-const app = new Vue({
-    el: '#app'
+$(document).ready(function () {
+    console.log('h');
+    /**
+    * Process datatable ajax call
+    *****************************************************************/
+    var oTable = $('#bands').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: window.location.origin + '/bands/data',
+            data: function (d) {
+                d.name = $('select[name=name]').val();
+                d.start_date = $('select[name=start_date]').val();
+                d.website = $('select[name=website]').val();
+                // d.still_active = $('select[name=still_active]').val();
+            }
+        },
+        columns: [
+            {data: 'name', name: 'bands.name'},
+            {data: 'start_date', name: 'bands.start_date'},
+            {data: 'website', name: 'bands.website'},
+            {data: 'still_active', name: 'bands.still_active', searchable: false}
+        ]
+    });
 });
