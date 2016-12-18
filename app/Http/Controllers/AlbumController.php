@@ -19,12 +19,24 @@ class AlbumController extends Controller
 
     public function data(Request $request)
     {
-        if ($request->search) {
-            $albums = Album::with('band')
-            ->where('name', 'LIKE', '%'.$request->search['value'].'%')
-            ->get();
-        } else {
-            $albums = Album::with('band')->get();
+        $albums = Album::with('band');
+
+        if (!empty($request->search['value'])) {
+            $albums = $albums
+                ->whereHas('band', function($query) use ($request){
+                    $query
+                    ->where('name', 'LIKE', '%'.$request->search['value'].'%')
+                    ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
+                })
+                ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%');
+        }
+
+        if ($request->has('band_id')) {
+            $albums = $albums
+                ->whereHas('band', function($query) use ($request){
+                    $query
+                    ->where('id', $request->band_id);
+                });
         }
 
         $datatables = Datatables::of($albums)
@@ -43,7 +55,6 @@ class AlbumController extends Controller
                 return $edit . $delete;
             })
         ->make(true);
-
         return $datatables;
     }
 }

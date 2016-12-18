@@ -19,6 +19,7 @@ Route::group(['prefix' => '/bands'], function() {
     Route::get('/data', ['uses' => 'BandController@data']);
     Route::get('/edit/{id}', ['uses' => 'BandController@edit', 'as' => 'band.edit']);
     Route::post('/delete/{id}', ['uses' => 'BandController@delete', 'as' => 'band.delete']);
+    Route::post('/search', ['uses' => 'BandController@search']);
 });
 
 Route::group(['prefix' => 'albums'], function () {

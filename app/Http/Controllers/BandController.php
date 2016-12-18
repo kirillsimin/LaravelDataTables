@@ -43,4 +43,13 @@ class BandController extends Controller
 
         return $datatables;
     }
+
+    public function search(Request $request)
+    {
+        return Band::select('id', 'name AS text')
+            ->where('name', 'LIKE', '%'.$request->term.'%')
+            ->orWhere('name', 'CONTAINS', '%'.$request->term.'%')
+            ->get()
+            ->toArray();
+    }
 }
