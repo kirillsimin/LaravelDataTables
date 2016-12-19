@@ -4,8 +4,13 @@
 @endsection
 
 @section('content')
-    <div class="col-md-2" style="margin-bottom: 10px;">
-        <select id="band-search" class="band-search form-control" style="width:100%;" autocomplete="off"></select>
+    <div class="col-md-6" style="margin-bottom: 10px;">
+        <label for="">Filter by band:</label>
+        <select id="band-search" class="band-search form-control" style="width:100%;" value="Search..." autocomplete="off"></select>
+    </div>
+
+    <div class="col-md-6 text-right">
+        <a href="{{ route('album.edit') }}" class="btn btn-info"><i class="fa fa-plus"></i> Add Album</a>
     </div>
 
     <div class="col-md-12">

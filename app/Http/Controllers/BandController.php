@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use Carbon\Carbon;
+use Validator;
+
+use Carbon;
 use Yajra\Datatables\Datatables;
 use App\Band;
 
@@ -30,7 +32,8 @@ class BandController extends Controller
 
         // Filter from search box
         if (!empty($request->search['value'])) {
-            $bands = $bands::where('name', 'LIKE', '%'.$request->search['value'].'%');
+            $bands = Band::where('name', 'LIKE', '%'.$request->search['value'].'%')
+                ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
         }
 
         // Process datatables object
@@ -82,4 +85,54 @@ class BandController extends Controller
         }
         return json_encode(['success' => false, 'message' => 'Something went wrong.']);
     }
+
+    /**
+    * Displays the edit/create page
+    * @param $request, Request instance
+    * @return View
+    */
+    public function edit(Request $request)
+    {
+        $band = Band::firstOrNew(['id' => $request->id]);
+        return view('bands.edit', [
+            'band' => $band
+            ]);
+    }
+
+    /**
+    * Save band
+    * @param $request, Request instance
+    * @return Json
+    */
+    public function save(Request $request)
+    {
+        $rules = [
+            'name' => 'required',
+            // There needs to be validation for the other fields as well (date, active_url, etc...)
+        ];
+        $messages = [
+            'name.required' => 'Band must have a name.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return $validator->errors();
+        }
+
+        $band = Band::firstOrNew(['id' => $request->id]);
+
+        // since we're not validating, I'm inserting nulls where there's no value
+        $band->name            = $request->name;
+        $band->start_date      = Carbon::parse($request->start_date);
+        $band->website         = $request->website ? $request->website : null;
+        $band->still_active    = $request->still_active ? $request->still_active : null;
+
+        if ($band->save()) {
+            return json_encode(['success' => true, 'message' => 'Band information successfully saved.', 'album_id' => $band->id]);
+        }
+
+        return json_encode(['success' => false, 'message' => 'Could not save information.']);
+    }
+
 }
