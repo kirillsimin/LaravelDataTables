@@ -38,7 +38,14 @@ class AlbumController extends Controller
                     $query->where('name', 'LIKE', '%'.$request->search['value'].'%')
                         ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
                     })
-                ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%');
+                ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%')
+                ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%')
+                ->orWhere('label', 'LIKE', '%'.$request->search['value'].'%')
+                ->orWhere('label', 'CONTAINS', '%'.$request->search['value'].'%')
+                ->orWhere('producer', 'LIKE', '%'.$request->search['value'].'%')
+                ->orWhere('producer', 'CONTAINS', '%'.$request->search['value'].'%')
+                ->orWhere('genre', 'LIKE', '%'.$request->search['value'].'%')
+                ->orWhere('genre', 'CONTAINS', '%'.$request->search['value'].'%');
         }
 
         // Filter from the bands dropdown
