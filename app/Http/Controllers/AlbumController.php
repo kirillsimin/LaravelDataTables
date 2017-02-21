@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Validator;
-
-use Illuminate\Http\Request;
-
 use Carbon;
+use Validator;
 use Yajra\Datatables\Datatables;
+use Illuminate\Http\Request;
 use App\Band;
 use App\Album;
-
 
 class AlbumController extends Controller
 {
@@ -30,47 +27,48 @@ class AlbumController extends Controller
     */
     public function data(Request $request)
     {
-        $albums = Album::with('band');
+
+        $albums = Album::withBands();
 
         // Filter from search box
         if (!empty($request->search['value'])) {
             $albums = $albums->whereHas('band', function ($query) use ($request) {
                     $query->where('name', 'LIKE', '%'.$request->search['value'].'%')
                         ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
-                    })
-                ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%')
-                ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%')
-                ->orWhere('label', 'LIKE', '%'.$request->search['value'].'%')
-                ->orWhere('label', 'CONTAINS', '%'.$request->search['value'].'%')
-                ->orWhere('producer', 'LIKE', '%'.$request->search['value'].'%')
-                ->orWhere('producer', 'CONTAINS', '%'.$request->search['value'].'%')
-                ->orWhere('genre', 'LIKE', '%'.$request->search['value'].'%')
-                ->orWhere('genre', 'CONTAINS', '%'.$request->search['value'].'%');
+            })
+            ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%')
+            ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%')
+            ->orWhere('label', 'LIKE', '%'.$request->search['value'].'%')
+            ->orWhere('label', 'CONTAINS', '%'.$request->search['value'].'%')
+            ->orWhere('producer', 'LIKE', '%'.$request->search['value'].'%')
+            ->orWhere('producer', 'CONTAINS', '%'.$request->search['value'].'%')
+            ->orWhere('genre', 'LIKE', '%'.$request->search['value'].'%')
+            ->orWhere('genre', 'CONTAINS', '%'.$request->search['value'].'%');
         }
 
         // Filter from the bands dropdown
         if ($request->has('band_id')) {
-            $albums = $albums->whereHas('band', function ($query) use ($request){
+            $albums = $albums->whereHas('band', function ($query) use ($request) {
                 $query->where('id', $request->band_id);
             });
         }
 
         // Process datatables object
         $datatables = Datatables::of($albums)
-        ->editColumn('band', function($albums) {
+        ->editColumn('band', function ($albums) {
             return $albums->band->name;
         })
-        ->editColumn('recorded_date', function($albums) {
+        ->editColumn('recorded_date', function ($albums) {
             return Carbon::parse($albums->recorded_date)->format('l jS \\of F Y');
         })
-        ->editColumn('release_date', function($albums) {
+        ->editColumn('release_date', function ($albums) {
             return Carbon::parse($albums->release_date)->format('l jS \\of F Y');
         })
         ->addColumn('action', function ($albums) {
                 $edit = '<a class="fa fa-edit" href="' . route('album.edit', $albums->id) . '"></a>&nbsp;&nbsp;';
                 $delete = '<i class="delete-album fa fa-trash-o" data-album-id="'.$albums->id.'" data-toggle="modal" data-target="#warning-modal">&nbsp;&nbsp;';
                 return $edit . $delete;
-            })
+        })
         ->make(true);
 
         return $datatables;

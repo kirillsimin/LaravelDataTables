@@ -10,10 +10,10 @@ $(document).ready(function () {
             url: window.location.origin + '/bands/data',
         },
         columns: [
-            {data: 'name', name: 'bands.name'},
-            {data: 'start_date', name: 'bands.start_date'},
-            {data: 'website', name: 'bands.website'},
-            {data: 'still_active', name: 'bands.still_active', searchable: false},
+            {data: 'name', name: 'name'},
+            {data: 'start_date', name: 'start_date'},
+            {data: 'website', name: 'website'},
+            {data: 'still_active', name: 'still_active', searchable: false},
             {data: 'action', name: 'action', orderable: false, searchable: false}
         ]
     });
@@ -31,7 +31,7 @@ $(document).ready(function () {
             }
         },
         columns: [
-            {data: 'band', name: 'band_id'},
+            {data: 'band', name: 'band_name'},
             {data: 'name', name: 'name'},
             {data: 'recorded_date', name: 'recorded_date'},
             {data: 'release_date', name: 'release_date'},
@@ -43,8 +43,8 @@ $(document).ready(function () {
         ]
     });
 
-    $('#band-search').off('select2:select', function(){});
-    $('#band-search').on('select2:select', function(e){
+    $('#band-search').off('change', function(){});
+    $('#band-search').on('change', function(e){
         e.preventDefault();
         albumsTable.draw();
     });
@@ -53,6 +53,7 @@ $(document).ready(function () {
     * Albums Select 2
     *****************************************************************/
     $('#band-search').select2({
+        allowClear: true,
         minimumInputLength: 3,
         initSelection: function (element, callback) {
             var bandId = $('#band-search').data('band-id');
