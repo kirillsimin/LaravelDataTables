@@ -28,7 +28,7 @@ class BandController extends Controller
     */
     public function data(Request $request)
     {
-        $bands = Band::all();
+        $bands = Band::select('name', 'start_date', 'website', 'still_active');
 
         // Filter from search box
         if (!empty($request->search['value'])) {
