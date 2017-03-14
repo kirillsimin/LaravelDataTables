@@ -1,4 +1,4 @@
-# LiteracyPro "Albums and Bands" Task
+# Laravel & DataTables Ajax Practice
 
 Laravel 5.3
 
