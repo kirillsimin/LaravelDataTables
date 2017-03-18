@@ -31,11 +31,11 @@ $(document).ready(function () {
             }
         },
         columns: [
-            {data: 'band', name: 'band_name'},
-            {data: 'name', name: 'name'},
-            {data: 'recorded_date', name: 'recorded_date'},
-            {data: 'release_date', name: 'release_date'},
-            {data: 'number_of_tracks', name: 'number_of_tracks'},
+            {data: 'band_name', name: 'name'},
+            {data: 'album_name', name: 'albums.name'},
+            {data: 'recorded_date', name: 'recorded_date', searchable: false},
+            {data: 'release_date', name: 'release_date', searchable: false},
+            {data: 'number_of_tracks', name: 'number_of_tracks', searchable: false},
             {data: 'label', name: 'label'},
             {data: 'producer', name: 'producer'},
             {data: 'genre', name: 'genre'},
