@@ -19,8 +19,8 @@ elixir((mix) => {
 
     mix.version(
         [
-            'public/css/app.css',
-            'public/css/app.js',
+            'css/app.css',
+            'js/app.js',
         ]
         , 'public/build');
 

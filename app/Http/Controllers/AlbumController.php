@@ -28,23 +28,9 @@ class AlbumController extends Controller
     public function data(Request $request)
     {
 
-        $albums = Album::withBands();
-
-        // Filter from search box
-        if (!empty($request->search['value'])) {
-            $albums = $albums->whereHas('band', function ($query) use ($request) {
-                    $query->where('name', 'LIKE', '%'.$request->search['value'].'%')
-                        ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%');
-            })
-            ->orWhere('name', 'LIKE', '%'.$request->search['value'].'%')
-            ->orWhere('name', 'CONTAINS', '%'.$request->search['value'].'%')
-            ->orWhere('label', 'LIKE', '%'.$request->search['value'].'%')
-            ->orWhere('label', 'CONTAINS', '%'.$request->search['value'].'%')
-            ->orWhere('producer', 'LIKE', '%'.$request->search['value'].'%')
-            ->orWhere('producer', 'CONTAINS', '%'.$request->search['value'].'%')
-            ->orWhere('genre', 'LIKE', '%'.$request->search['value'].'%')
-            ->orWhere('genre', 'CONTAINS', '%'.$request->search['value'].'%');
-        }
+        $albums = new Album;
+        $album = $albums->withBands();
+        $albums = $albums->search($request);
 
         // Filter from the bands dropdown
         if ($request->has('band_id')) {
@@ -55,7 +41,10 @@ class AlbumController extends Controller
 
         // Process datatables object
         $datatables = Datatables::of($albums)
-        ->editColumn('band', function ($albums) {
+        ->editColumn('album_name', function ($albums) {
+            return $albums->name;
+        })
+        ->editColumn('band_name', function ($albums) {
             return $albums->band->name;
         })
         ->editColumn('recorded_date', function ($albums) {
