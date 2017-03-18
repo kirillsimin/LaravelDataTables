@@ -1,8 +1,12 @@
 {
   "css/app.css": "css/app-0dd49d1ea6.css",
 <<<<<<< HEAD
+<<<<<<< HEAD
   "js/app.js": "js/app-e68496a419.js"
 =======
   "js/app.js": "js/app-7eb7a2b437.js"
+>>>>>>> album-search
+=======
+  "js/app.js": "js/app-62db02365b.js"
 >>>>>>> album-search
 }

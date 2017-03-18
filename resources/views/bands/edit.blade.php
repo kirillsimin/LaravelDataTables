@@ -30,9 +30,9 @@
 
             <div class="producer">
                 <label for="name">Still Active:</label>
-                <select class="form-control">
-                    <option value="1">Acive</option>
-                    <option value="0">Not Acive</option>
+                <select class="form-control" name="still-active">
+                    <option value="1">Active</option>
+                    <option value="0">Not Active</option>
                 </select>
                 <span class="help-block"></span>
             </div>
