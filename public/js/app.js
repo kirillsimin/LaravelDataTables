@@ -170,9 +170,6 @@ $(document).ready(function () {
         });
     });
 
-    /**
-    * Save Album
-    *****************************************************************/
     $('#save-album').off('click');
     $('#save-album').on('click', function() {
         var id = $('input[name="id"]').val();
@@ -232,9 +229,6 @@ $(document).ready(function () {
         });
     });
 
-    /**
-    * Save band
-    *****************************************************************/
     $('#save-band').off('click');
     $('#save-band').on('click', function() {
         var id = $('input[name="id"]').val();

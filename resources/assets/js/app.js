@@ -236,7 +236,7 @@ $(document).ready(function () {
         var name = $('input[name="name"]').val();
         var startDate = $('input[name="recorded-date"]').val();
         var website = $('input[name="website"]').val();
-        var stillActive = $('input[name="number-of-tracks"]').val();
+        var stillActive = $('select[name="still-active"]').val();
         $.ajax({
             url: '/bands/save',
             method: 'post',
