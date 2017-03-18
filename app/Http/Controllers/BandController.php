@@ -126,7 +126,7 @@ class BandController extends Controller
         $band->name            = $request->name;
         $band->start_date      = Carbon::parse($request->start_date);
         $band->website         = $request->website ? $request->website : null;
-        $band->still_active    = $request->still_active ? $request->still_active : null;
+        $band->still_active    = (int) $request->still_active;
 
         if ($band->save()) {
             return json_encode(['success' => true, 'message' => 'Band information successfully saved.', 'album_id' => $band->id]);
